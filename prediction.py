@@ -6,7 +6,7 @@ import re
 from nltk.tokenize import word_tokenize
 import pandas as pd
 from ntscraper import Nitter
-
+import streamlit as st
 
 import nltk
 nltk.download('punkt')
@@ -26,19 +26,19 @@ def get_tweets(username):
 
 def load_files():
     try:
-        with open("saved-models/RandomForest_E-I.sav", "rb") as file:
+        with open("RandomForest_E-I.sav", "rb") as file:
             ei_classifier = pickle.load(file)
-        with  open("saved-models/RandomForest_N-S.sav", "rb") as file:
+        with  open("RandomForest_N-S.sav", "rb") as file:
             ns_classifier = pickle.load(file)
-        with open("saved-models/SVM_F-T.sav", "rb") as file:
+        with open("SVM_F-T.sav", "rb") as file:
             ft_classifier = pickle.load(file)
-        with  open("saved-models/RandomForest_J-P.sav", "rb") as file:
+        with  open("RandomForest_J-P.sav", "rb") as file:
             jp_classifier = pickle.load(file)
     except FileNotFoundError:
         print("Model not found!")
 
     try:
-        with open("vectorizer/vectorizer.pkl", "rb") as file:
+        with open("vectorizer.pkl", "rb") as file:
             vectorizer = pickle.load(file)
     except FileNotFoundError:
         print("Tokenizer not found!")
@@ -80,12 +80,19 @@ def get_prediction(username):
     return prediction, tweets
 
 def main():
-    username = input("Enter a Twitter username: ")
-    prediction, tweets = get_prediction(username)
-    print("Predicted Myers-Briggs personality type:", prediction)
-    print("Recent tweets:")
-    for tweet in tweets:
-        print("-", tweet)
+    st.title('Twitter Personality Prediction App')
+    username = st.text_input('Enter a Twitter username:')
+    
+    if st.button('Predict'):
+        if username:
+            prediction, tweets = get_prediction(username)
+            st.write("Predicted Myers-Briggs personality type:", prediction)
+            st.write("Recent tweets:")
+            for _tweet in tweets:
+                st.write("-", _tweet)
+        else:
+            st.warning('Please enter a Twitter username.')
 
 if __name__ == "__main__":
     main()
+

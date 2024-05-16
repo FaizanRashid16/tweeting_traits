@@ -1,0 +1,7 @@
+ntscraper
+nltk
+pandas
+streamlit
+contractions
+streamlit
+sklearn

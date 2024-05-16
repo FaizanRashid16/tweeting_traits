@@ -4,4 +4,4 @@ pandas
 streamlit
 contractions
 streamlit
-sklearn
+scikit-learn
